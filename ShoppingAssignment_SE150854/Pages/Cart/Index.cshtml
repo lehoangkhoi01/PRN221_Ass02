@@ -1,0 +1,53 @@
+﻿@*@page
+@model ShoppingAssignment_SE150854.Pages.Cart.IndexModel
+@{
+}
+
+@if(Model.Cart != null)
+{
+    <table class="table table-striped table-bordered mydatatable">
+    <thead>
+        <tr>
+            <th>
+                Product Name
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Price
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+@foreach (var item in Model.Cart) {
+            <tr>
+                <form asp-page-handler="Remove" method="post">
+                    <input type="hidden" name="productId" value="@item.ProductId" />
+                <td>
+                        @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    <a asp-page="./Index" asp-route-id="@item.ProductId" asp-page-handler="Increase">+</a> |
+                    <a asp-page="./Index" asp-route-id="@item.ProductId" asp-page-handler="Decrease">-</a>
+                    <button type="submit">Remove</button>
+                </td>
+                </form>
+            </tr>
+}
+    </tbody>
+</table>
+} 
+else
+{
+    <h1>The cart is empty</h1>
+}
+*@
