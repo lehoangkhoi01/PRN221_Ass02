@@ -11,7 +11,11 @@ namespace DataAccess.Repository
     {
         public IEnumerable<Order> GetAllOrders();
         public IEnumerable<Order> GetOrderByCustomerId(string customerId);
+        public Order GetOrderById(string id);
         public void AddNewOrder(Order order);
         public void UpdateOrder(Order order);
+        public int GetTotalOrder();
+        public int GetTotalProductSold();
+        public decimal GetTotalIncome();
     }
 }

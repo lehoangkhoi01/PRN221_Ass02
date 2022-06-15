@@ -30,19 +30,36 @@ namespace DataAccess
         }
         //----------------------------------------
 
-        public IEnumerable<OrderDetail> GetOrdersByOrderId(string orderId)
+        public IEnumerable<OrderDetail> GetOrderDetailsByOrderId(string orderId)
         {
             IEnumerable<OrderDetail> orderList;
             try
             {
                 var dbContext = new NorthwindCopyDBContext();
-                orderList = dbContext.OrderDetails.Where(o => o.OrderId == orderId);
+                orderList = dbContext.OrderDetails.Include(o => o.Product).Where(o => o.OrderId == orderId);
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
             return orderList;
+        }
+
+        public OrderDetail GetOrderDetailById(string orderId, int productId)
+        {
+            OrderDetail orderDetail;
+            try
+            {
+                var dbContext = new NorthwindCopyDBContext();
+                orderDetail = dbContext.OrderDetails
+                                    .Include(o => o.Product)
+                                    .SingleOrDefault(o => o.ProductId == productId && o.OrderId == orderId);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return orderDetail;
         }
 
         public void AddNewOrderDetail(IEnumerable<OrderDetail> orderDetails)

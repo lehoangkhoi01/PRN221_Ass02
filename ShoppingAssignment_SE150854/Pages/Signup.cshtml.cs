@@ -39,7 +39,8 @@ namespace ShoppingAssignment_SE150854.Pages
         public string Address { get; set; }
 
 
-        [DataType(DataType.PhoneNumber)]
+        [Required(ErrorMessage = "Phone can not be empty")]
+        [RegularExpression("[0-9]{10}", ErrorMessage = "Wrong format for phone number")]
         public string PhoneNumber { get; set; }
 
 

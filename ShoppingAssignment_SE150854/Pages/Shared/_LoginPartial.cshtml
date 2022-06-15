@@ -5,7 +5,9 @@
     @if (HttpContextAccessor.HttpContext.Session.GetString("EMAIL") != null)
     {
         <li class="nav-item mr-3">
-            @HttpContextAccessor.HttpContext.Session.GetString("EMAIL")
+            <a asp-page="/Customers/Edit">
+                @HttpContextAccessor.HttpContext.Session.GetString("EMAIL")
+            </a>
         </li>
         <li class="nav-item">
             <a asp-page="Index" asp-page-handler="Logout">Logout</a>

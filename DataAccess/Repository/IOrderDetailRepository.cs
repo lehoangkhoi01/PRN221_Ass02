@@ -10,6 +10,7 @@ namespace DataAccess.Repository
     public interface IOrderDetailRepository
     {
         public IEnumerable<OrderDetail> GetOrderDetailsByOrderId(string orderId);
+        public OrderDetail GetOrderDetailById(string orderId, int productId);
         public void AddOrderDetail(IEnumerable<OrderDetail> orderDetails);    
     }
 }

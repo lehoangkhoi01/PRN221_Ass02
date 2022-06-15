@@ -1,127 +1,136 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.ComponentModel.DataAnnotations;
-//using System.Linq;
-//using System.Threading.Tasks;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.AspNetCore.Mvc.RazorPages;
-//using Microsoft.AspNetCore.Mvc.Rendering;
-//using Microsoft.EntityFrameworkCore;
-//using ShoppingAssignment_SE150854.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+using BusinessObject.Models;
+using DataAccess.Repository;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using ShoppingAssignment_SE150854.Utils;
 
-//namespace ShoppingAssignment_SE150854.Pages.Customers
-//{
-//    [BindProperties]
-//    public class EditModel : PageModel
-//    {
-//        private readonly NorthwindCopyDBContext _context;
+namespace ShoppingAssignment_SE150854.Pages.Customers
+{
+    [BindProperties]
+    public class EditModel : PageModel
+    {
+        private readonly ICustomerRepository customerRepository;
 
-//        public EditModel(NorthwindCopyDBContext context)
-//        {
-//            _context = context;
-//        }
+        public EditModel(ICustomerRepository customerRepository)
+        {
+            this.customerRepository = customerRepository;
+        }
 
-//        [BindProperty]
-//        public Customer Customer { get; set; }
+        [BindProperty]
+        public Customer Customer { get; set; }
 
-//        public string CustomerId { get; set; }
+        public string CustomerId { get; set; }
 
-//        [DataType(DataType.Password)]
-//        [Required(ErrorMessage = "Password can not be empty")]
-//        [StringLength(maximumLength: 20, 
-//                        ErrorMessage = "Password's lenght must be between 6-20", 
-//                        MinimumLength = 6)]
-//        public string Password { get; set; }
-
-//        [Required(ErrorMessage = "Contact name can not be empty")]
-//        [Display(Name = "Contact Name")]
-//        [StringLength(maximumLength: 20,
-//                        MinimumLength = 2,
-//                        ErrorMessage = "Contact name's length must be between 2-20 characters")]
-//        public string ContactName { get; set; }
+        [Required(ErrorMessage = "Please enter your current password.")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
 
 
-//        [Required(ErrorMessage = "Address can not be empty")]
-//        [StringLength(maximumLength: 50, 
-//                        ErrorMessage = "Address's length", 
-//                        MinimumLength = 10)]
-//        public string Address { get; set; }
+        [DataType(DataType.Password)]
+        [Display(Name = "New password")]
+        [StringLength(maximumLength: 20,
+                        ErrorMessage = "Password's lenght must be between 6-20",
+                        MinimumLength = 6)]
+        public string NewPassword { get; set; }
+
+        [Required(ErrorMessage = "Contact name can not be empty")]
+        [Display(Name = "Contact Name")]
+        [StringLength(maximumLength: 20,
+                        MinimumLength = 2,
+                        ErrorMessage = "Contact name's length must be between 2-20 characters")]
+        public string ContactName { get; set; }
 
 
-//        [Required(ErrorMessage = "Phone can not be empty")]
-//        [RegularExpression("[0-9]{10}", ErrorMessage = "Wrong format for phone number")]
-//        public string Phone { get; set; }
+        [Required(ErrorMessage = "Address can not be empty")]
+        [StringLength(maximumLength: 50,
+                        ErrorMessage = "Address's length",
+                        MinimumLength = 10)]
+        public string Address { get; set; }
 
 
-//        [EmailAddress(ErrorMessage = "Wrong format for email address")]
-//        [Required(ErrorMessage = "Email can not be empty")]
-//        public string Email { get; set; }
+        [Required(ErrorMessage = "Phone can not be empty")]
+        [RegularExpression("[0-9]{10}", ErrorMessage = "Wrong format for phone number")]
+        public string Phone { get; set; }
 
-//        public async Task<IActionResult> OnGetAsync(string id)
-//        {
-//            if (id == null)
-//            {
-//                return NotFound();
-//            }
 
-//            Customer = await _context.Customers.FirstOrDefaultAsync(m => m.CustomerId == id);
+        [EmailAddress(ErrorMessage = "Wrong format for email address")]
+        [Required(ErrorMessage = "Email can not be empty")]
+        public string Email { get; set; }
 
-//            if (Customer == null)
-//            {
-//                return NotFound();
-//            }
-//            else
-//            {
-//                CustomerId = Customer.CustomerId;
-//                Password = Customer.Password;
-//                ContactName = Customer.ContactName;
-//                Phone = Customer.Phone;
-//                Address = Customer.Address;
-//                Email = Customer.Email;
-//            }
-//            return Page();
-//        }
+        public IActionResult OnGet()
+        {
+            string email = HttpContext.Session.GetString("EMAIL");
+            string role = HttpContext.Session.GetString("ROLE");
+            if(string.IsNullOrEmpty(role))
+            {
+                return RedirectToPage("/Login");
+            }
+            else if(role == "Admin")
+            {
+                return NotFound();
+            }
 
-//        // To protect from overposting attacks, enable the specific properties you want to bind to.
-//        // For more details, see https://aka.ms/RazorPagesCRUD.
-//        public async Task<IActionResult> OnPostAsync()
-//        {
-//            if (!ModelState.IsValid)
-//            {
-//                return Page();
-//            }
-//            var customer = await _context.Customers.FirstOrDefaultAsync(m => m.CustomerId == CustomerId);
-//            customer.ContactName = ContactName;
-//            customer.Phone = Phone;
-//            customer.Address = Address;
-//            customer.Email = Email;
-//            customer.Password = Password;
+            Customer customer = customerRepository.GetCustomerByEmail(email);
+            if (customer == null)
+            {
+                return NotFound();
+            }
 
-//            _context.Attach(customer).State = EntityState.Modified;
+            
+            CustomerId = customer.CustomerId;
+            ContactName = customer.ContactName;
+            Phone = customer.Phone;
+            Address = customer.Address;
+            Email = customer.Email;
+            return Page();
+        }
 
-//            try
-//            {
-//                await _context.SaveChangesAsync();
-//            }
-//            catch (DbUpdateConcurrencyException ex)
-//            {
-//                if (!CustomerExists(Customer.CustomerId))
-//                {
-//                    return NotFound();
-//                }
-//                else
-//                {
-//                    ViewData["Message"] = ex.Message;
-//                    return Page();
-//                }
-//            }
+        public IActionResult OnPost()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
 
-//            return RedirectToPage("./Index");
-//        }
+            try
+            {
+                Customer currentCustomer = customerRepository.GetCustomerById(CustomerId);
+                if (!string.Equals(currentCustomer.Password, HashingUtil.HashPassword(Password)))
+                {
+                    TempData["Message"] = "Your current password is not valid";
+                    return Page();
+                }
 
-//        private bool CustomerExists(string id)
-//        {
-//            return _context.Customers.Any(e => e.CustomerId == id);
-//        }
-//    }
-//}
+                Customer customer = new Customer
+                {
+                    ContactName = ContactName,
+                    Phone = Phone,
+                    Address = Address,
+                    CustomerId = CustomerId,
+                    Email = Email,
+                    Password = string.IsNullOrEmpty(NewPassword) ? 
+                                HashingUtil.HashPassword(Password) : HashingUtil.HashPassword(NewPassword)
+                };
+
+                customerRepository.Update(customer);
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = ex.Message;
+                return Page();
+            }
+
+            TempData["Message"] = "Update successfully.";
+            return Page();
+        }
+
+    }
+}

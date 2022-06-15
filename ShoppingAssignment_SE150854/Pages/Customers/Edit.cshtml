@@ -1,4 +1,4 @@
-﻿@*@page
+﻿@page
 @model ShoppingAssignment_SE150854.Pages.Customers.EditModel
 
 @{
@@ -13,17 +13,12 @@
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="CustomerId" />
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" value="@Model.Password"/>
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="CustomerId" />            
             <div class="form-group">
                 <label asp-for="ContactName" class="control-label"></label>
                 <input asp-for="ContactName" class="form-control" />
                 <span asp-validation-for="ContactName" class="text-danger"></span>
-            </div>
+            </div>           
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>
                 <input asp-for="Address" class="form-control" />
@@ -39,6 +34,18 @@
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control"/>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NewPassword" class="control-label"></label>
+                <input asp-for="NewPassword" class="form-control"/>
+                <span asp-validation-for="NewPassword" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -53,4 +60,11 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-*@
+
+<script type="text/javascript">
+    window.onload = function() {
+        if ('@TempData["Message"]' != "") {
+            alert('@TempData["Message"]');
+        }
+    };
+</script>

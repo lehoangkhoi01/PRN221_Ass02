@@ -122,7 +122,7 @@ namespace ShoppingAssignment_SE150854.Pages.Cart
                     OrderId = GetRandomString.GenerateRandomString(),
                     CustomerId = customer.CustomerId,
                     Freight = TotalPrice,
-                    OrderDate = DateTime.Now.Date,
+                    OrderDate = DateTime.Now,
                     ShipAddress = ShippingAddress,
                 };
 

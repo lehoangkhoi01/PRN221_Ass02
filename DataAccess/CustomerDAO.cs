@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -109,13 +110,39 @@ namespace DataAccess
             try
             {
                 var dbContext = new NorthwindCopyDBContext();
-                dbContext.Customers.Update(customer);
-                dbContext.SaveChanges();
+                if (!CheckUpdateCustomerEmail(customer))
+                {
+                    throw new Exception("This email is already existed.");
+                }
+                else
+                {
+                    dbContext.Entry<Customer>(customer).State = EntityState.Modified;                 
+                    dbContext.SaveChanges();
+                }
             }
             catch(Exception ex)
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        private bool CheckUpdateCustomerEmail(Customer customer)
+        {
+            try
+            {
+                var dbContext = new NorthwindCopyDBContext();
+                List<Customer> customerList = dbContext.Customers.ToList();
+                customerList.RemoveAll(c => c.CustomerId == customer.CustomerId);
+                if (customerList.Exists(p => p.Email.ToLower().Trim() == customer.Email.ToLower().Trim()))
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return true;
         }
 
     }

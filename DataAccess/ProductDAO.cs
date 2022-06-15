@@ -110,9 +110,6 @@ namespace DataAccess
             try
             {
                 var dbContext = new NorthwindCopyDBContext();
-                //List<Product> productList = dbContext.Products.ToList();
-                //Product _product = GetProductById(product.ProductId);
-                //productList.Remove(_product);
                 if (!CheckUpdateProductName(product))
                 {
                     throw new Exception("This product is already existed.");

@@ -47,6 +47,51 @@ namespace DataAccess
             return orderList;
         }
 
+        public int GetTotalOrder()
+        {
+            int result = 0;
+            try
+            {
+                var dbContext = new NorthwindCopyDBContext();
+                result = dbContext.Orders.Count();
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return result;
+        }
+
+        public int GetTotalProductSold()
+        {
+            int result = 0;
+            try
+            {
+                var dbContext = new NorthwindCopyDBContext();
+                result = dbContext.Orders.Sum(o => o.OrderDetails.Sum(o => o.Quantity));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return result;
+        } 
+
+        public decimal GetTotalOrderIncome()
+        {
+            decimal result = 0;
+            try
+            {
+                var dbContext = new NorthwindCopyDBContext();
+                result = (decimal)dbContext.Orders.Sum(o => o.Freight);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return result;
+        }
+
         public IEnumerable<Order> GetOrdersByCustomerId(string customerId)
         {
             IEnumerable<Order> orderList;
