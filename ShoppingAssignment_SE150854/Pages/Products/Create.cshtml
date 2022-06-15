@@ -20,11 +20,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProductViewModel.SupplierId" class="control-label"></label>
-                <select asp-for="ProductViewModel.SupplierId" class ="form-control" asp-items="ViewBag.SupplierId"></select>
+                <select asp-for="ProductViewModel.SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="ProductViewModel.CategoryId" class="control-label"></label>
-                <select asp-for="ProductViewModel.CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
+                <select asp-for="ProductViewModel.CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="ProductViewModel.QuantityPerUnit" class="control-label"></label>
@@ -37,13 +37,13 @@
                 <span asp-validation-for="ProductViewModel.UnitPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProductViewModel.ProductStatus" class="control-label"></label>   
-                 <input class="form-check" asp-for="ProductViewModel.ProductStatus" /> 
+                <label asp-for="ProductViewModel.ProductStatus" class="control-label"></label>
+                <input class="form-check" asp-for="ProductViewModel.ProductStatus" />
             </div>
             <div class="form-group">
-                <label asp-for="ProductViewModel.ImageFile" class="control-label"></label>
-                <input asp-for="ProductViewModel.ImageFile" class="form-control"/>
-                <span asp-validation-for="ProductViewModel.ImageFile" class="text-danger"></span>
+                <label asp-for="ImageFile" class="control-label"></label>
+                <input asp-for="ImageFile" class="form-control" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -57,5 +57,15 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
+    <script type="text/javascript">
+        window.onload = function() {
+            if ('@TempData["Message"]' != "") {
+                alert('@TempData["Message"]');
+            }
+        };
+    </script>

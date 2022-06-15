@@ -9,6 +9,9 @@ using BusinessObject.Models;
 using ShoppingAssignment_SE150854.View_Models;
 using DataAccess.Repository;
 using ShoppingAssignment_SE150854.Utils.FileUploadService;
+using System.ComponentModel.DataAnnotations;
+using ShoppingAssignment_SE150854.Validation;
+using Microsoft.AspNetCore.Http;
 
 namespace ShoppingAssignment_SE150854.Pages.Products
 {
@@ -44,6 +47,13 @@ namespace ShoppingAssignment_SE150854.Pages.Products
         [BindProperty]
         public ProductViewModel ProductViewModel { get; set;}
 
+        [BindProperty]
+        [Required(ErrorMessage = "Product's image can not be empty")]
+        [DataType(DataType.Upload)]
+        [Display(Name = "Choose an image to upload")]
+        [ProductImageValidation]
+        public IFormFile ImageFile { get; set; }
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -60,7 +70,7 @@ namespace ShoppingAssignment_SE150854.Pages.Products
             {
                 try
                 {
-                    string filePath = await fileUploadService.UploadFileAsync(ProductViewModel.ImageFile);
+                    string filePath = await fileUploadService.UploadFileAsync(ImageFile);
                     Product product = new Product
                     {
                         ProductName = ProductViewModel.ProductName,
@@ -69,7 +79,7 @@ namespace ShoppingAssignment_SE150854.Pages.Products
                         QuantityPerUnit = ProductViewModel.QuantityPerUnit,
                         UnitPrice = ProductViewModel.UnitPrice,
                         ProductStatus = byte.Parse(ProductViewModel.ProductStatus ? 1.ToString() : 0.ToString()),
-                        ProductImage = ProductViewModel.ImageFile.FileName
+                        ProductImage = ImageFile.FileName
                     };
                     productRepository.AddProduct(product);
                 }
@@ -79,13 +89,13 @@ namespace ShoppingAssignment_SE150854.Pages.Products
                     IEnumerable<Supplier> suppliers = supplierRepository.GetSuppliers();
                     ViewData["CategoryId"] = new SelectList(categories, "CategoryId", "CategoryName");
                     ViewData["SupplierId"] = new SelectList(suppliers, "SupplierId", "CompanyName");
-                    ViewData["ErrorMessage"] = ex.Message;
+                    TempData["ErrorMessage"] = ex.Message;
                     return Page();
                 }                               
             }
             else
             {
-                ViewData["ErrorMessage"] = "This product is already existed.";
+                TempData["ErrorMessage"] = "This product is already existed.";
             }
 
             return RedirectToPage("./Index");

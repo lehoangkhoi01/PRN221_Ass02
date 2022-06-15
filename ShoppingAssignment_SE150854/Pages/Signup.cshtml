@@ -1,8 +1,7 @@
-﻿@*@page
+﻿@page
 @model ShoppingAssignment_SE150854.Pages.SignupModel
 @{
     ViewData["Title"] = "Register";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="wrapper px-5 py-3">
@@ -14,12 +13,12 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-row">
             <div class="form-group col-12 col-lg-6">
-                <label class="control-label">Email</label>
-                <input class="form-control" asp-for="CustomerEmail" disabled />
+                <label class="control-label" asp-for="CustomerEmail"></label>
+                <input class="form-control" asp-for="CustomerEmail" />
             </div>
             <div class="form-group col-12 col-lg-6">
-                <label class="control-label" asp-for="CustomerEmail"/>
-                <input class="form-control" asp-for="CustomerEmail" />
+                <label class="control-label" asp-for="CustomerName"></label>
+                <input class="form-control" asp-for="CustomerName" />
             </div>
         </div>
 
@@ -49,4 +48,3 @@
         </div>
     </form>
 </div>
-*@

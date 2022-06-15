@@ -12,5 +12,8 @@ namespace DataAccess.Repository
         public Customer Login(string email, string password);
         public void Signup(Customer customer);
         public void Update(Customer customer);
+        public IEnumerable<Customer> GetCustomerList();
+        public Customer GetCustomerById(string id);
+        public Customer GetCustomerByEmail(string email);
     }
 }

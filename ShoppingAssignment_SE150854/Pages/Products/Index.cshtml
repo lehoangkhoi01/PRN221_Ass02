@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{searchString?}"
 @model ShoppingAssignment_SE150854.Pages.Products.IndexModel
 
 @{
@@ -10,63 +10,97 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
+<form >
+    <div class="form-group">
+    <label for="searchBox">Search product</label>
+    <input type="text" class="form-control col-6" id="searchBox" asp-for="SearchString" />
+    <button class="btn btn-primary mt-3" type="submit">Search</button>
+  </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Product[0].ProductName)
+                @Html.DisplayNameFor(model => model.ProductList[0].ProductName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Product[0].QuantityPerUnit)
+                @Html.DisplayNameFor(model => model.ProductList[0].QuantityPerUnit)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Product[0].UnitPrice)
+                @Html.DisplayNameFor(model => model.ProductList[0].UnitPrice)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Product[0].ProductImage)
+                @Html.DisplayNameFor(model => model.ProductList[0].ProductImage)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Product[0].ProductStatus)
+                @Html.DisplayNameFor(model => model.ProductList[0].ProductStatus)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Product[0].Category)
+                @Html.DisplayNameFor(model => model.ProductList[0].Category)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Product[0].Supplier)
+                @Html.DisplayNameFor(model => model.ProductList[0].Supplier)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Product) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QuantityPerUnit)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UnitPrice)
-            </td>
-            <td>
-                <img src="~/images/@item.ProductImage" alt="product image" height="150" width="150"/>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductStatus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Supplier.CompanyName)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.ProductId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ProductId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ProductId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.ProductList)
+        {
+            <form method="post" asp-page-handler="AddToCart">
+                <input type="hidden" name="productId" value="@item.ProductId" />
+            <tr>
+                <td>
+                        @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.QuantityPerUnit)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.UnitPrice)
+                </td>
+                <td>
+                    <img src="~/images/@item.ProductImage" alt="product image" height="150" width="150" />
+                </td>
+                <td>
+                        @if(item.ProductStatus)
+                        {
+                            <span>Active</span>
+                        }
+                        else
+                        {
+                            <span>Inactive</span>
+                        }
+                    </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.Supplier.CompanyName)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.ProductId">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.ProductId">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ProductId">Delete</a>|
+                    <button class="btn btn-primary" type="submit">Add to cart</button>
+                </td>
+            </tr>
+            </form>
+        }
     </tbody>
 </table>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script type="text/javascript">
+    window.onload = function() {
+        if ('@TempData["Message"]' != "") {
+            alert('@TempData["Message"]');
+        }
+    };
+</script>

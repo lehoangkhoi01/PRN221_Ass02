@@ -5,9 +5,9 @@ VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingAssignment_SE150854", "ShoppingAssignment_SE150854.csproj", "{8F1A496E-33C3-456F-A1BB-CC94D9780D8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessObject", "..\BusinessObject\BusinessObject.csproj", "{6A87A33C-E09D-46F6-9DCD-32FCAD737F0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessObject", "..\BusinessObject\BusinessObject.csproj", "{6A87A33C-E09D-46F6-9DCD-32FCAD737F0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "..\DataAccess\DataAccess.csproj", "{2EB7AAA1-4FB1-4148-AA23-D2FC92019D17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "..\DataAccess\DataAccess.csproj", "{2EB7AAA1-4FB1-4148-AA23-D2FC92019D17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

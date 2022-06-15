@@ -14,5 +14,6 @@ namespace DataAccess.Repository
         public Product GetProductByName(string name);
         public void AddProduct(Product product);
         public void UpdateProduct(Product product);
+        public void DeleteProduct(int id); 
     }
 }

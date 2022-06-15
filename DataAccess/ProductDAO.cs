@@ -47,13 +47,17 @@ namespace DataAccess
             return productList;
         }
 
+
         public Product GetProductById(int id)
         {
             Product product;
             try
             {
                 var dbContext = new NorthwindCopyDBContext();
-                product = dbContext.Products.FirstOrDefault(p => p.ProductId == id);
+                product = dbContext.Products
+                    .Include(p => p.Category)
+                    .Include(p => p.Supplier)
+                    .FirstOrDefault(p => p.ProductId == id);
             }
             catch (Exception ex)
             {
@@ -106,15 +110,18 @@ namespace DataAccess
             try
             {
                 var dbContext = new NorthwindCopyDBContext();
-                List<Product> productList = dbContext.Products.ToList();
-                productList.Remove(product);
-                if(productList.Exists(p => p.ProductName.ToLower().Trim() == product.ProductName.ToLower().Trim()))
+                //List<Product> productList = dbContext.Products.ToList();
+                //Product _product = GetProductById(product.ProductId);
+                //productList.Remove(_product);
+                if (!CheckUpdateProductName(product))
                 {
                     throw new Exception("This product is already existed.");
                 } 
                 else
                 {
-                    dbContext.Products.Update(product);
+                    //_product = product;
+                    dbContext.Entry<Product>(product).State = EntityState.Modified;
+                    //dbContext.Products.Update(_product);                   
                     dbContext.SaveChanges();
                 }
             }
@@ -124,6 +131,39 @@ namespace DataAccess
             }
         }
 
+        private bool CheckUpdateProductName(Product product)
+        {
+            try
+            {
+                var dbContext = new NorthwindCopyDBContext();
+                List<Product> productList = dbContext.Products.ToList();
+                productList.RemoveAll(p => p.ProductId == product.ProductId);
+                if (productList.Exists(p => p.ProductName.ToLower().Trim() == product.ProductName.ToLower().Trim()))
+                {
+                    return false;
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return true;
+        }
 
+        public void DeleteProduct(int productId)
+        {
+            try
+            {
+                var dbContext = new NorthwindCopyDBContext();
+                Product product = dbContext.Products.FirstOrDefault(p => p.ProductId == productId);
+                product.ProductStatus = 0;
+                dbContext.Update(product);
+                dbContext.SaveChanges();
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

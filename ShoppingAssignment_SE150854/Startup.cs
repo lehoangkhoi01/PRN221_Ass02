@@ -35,7 +35,10 @@ namespace ShoppingAssignment_SE150854
             services.AddSingleton<IProductRepository, ProductRepository>();
             services.AddSingleton<ICategoryRepository, CategoryRepository>();
             services.AddSingleton<ISupplierRepository, SupplierRepository>();
+            services.AddSingleton<IOrderRepository, OrderRepository>();
+            services.AddSingleton<IOrderDetailRepository, OderDetailRepository>();
             services.AddSingleton<IFileUploadService, LocalFileUploadService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

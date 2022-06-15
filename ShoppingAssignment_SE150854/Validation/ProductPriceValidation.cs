@@ -16,6 +16,11 @@ namespace ShoppingAssignment_SE150854.Validation
             try
             {
                 decimal price = decimal.Parse(value.ToString());
+                if(price < 0)
+                {
+                    ErrorMessage = "Product's price can not be negative";
+                    return false;
+                }
             }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using BusinessObject.Models;
 using Microsoft.AspNetCore.Http;
 using ShoppingAssignment_SE150854.Validation;
 
@@ -6,6 +7,10 @@ namespace ShoppingAssignment_SE150854.View_Models
 {
     public class ProductViewModel
     {
+        [Display(Name = "Product ID")]
+        public int ProductId { get; set; }
+
+
         [Display(Name = "Product's name")]
         [Required (ErrorMessage = "Product's name can not be empty")]
         [StringLength(maximumLength: 30,
@@ -38,14 +43,16 @@ namespace ShoppingAssignment_SE150854.View_Models
         [Display(Name = "Product's image")]
         public string ProductImage { get; set; }
 
-        [Required(ErrorMessage = "Product's image can not be empty")]
-        [DataType(DataType.Upload)]
-        [Display(Name = "Choose an image to upload")]
-        [ProductImageValidation]
-        public IFormFile ImageFile { get; set; }
+        
 
 
         [Display(Name = "Status")]
         public bool ProductStatus { get; set; }
+
+        [Display(Name = "Category")]
+        public Category Category { get; set; }
+
+        [Display(Name = "Supplier")]
+        public Supplier Supplier { get; set; }
     }
 }

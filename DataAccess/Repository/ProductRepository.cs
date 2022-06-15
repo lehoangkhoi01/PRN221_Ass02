@@ -18,5 +18,7 @@ namespace DataAccess.Repository
         public IEnumerable<Product> GetProductList() => ProductDAO.Instance.GetProductList();
 
         public void UpdateProduct(Product product) => ProductDAO.Instance.UpdateProduct(product);
+    
+        public void DeleteProduct(int id) => ProductDAO.Instance.DeleteProduct(id);
     }
 }

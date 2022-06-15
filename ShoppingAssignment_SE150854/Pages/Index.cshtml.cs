@@ -26,6 +26,7 @@ namespace ShoppingAssignment_SE150854.Pages
         {
             HttpContext.Session.Remove("EMAIL");
             HttpContext.Session.Remove("ROLE");
+            HttpContext.Session.Remove("CART");
             return RedirectToPage("/Index");
         }
     }

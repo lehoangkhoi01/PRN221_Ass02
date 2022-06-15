@@ -6,35 +6,53 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject.Models;
+using DataAccess.Repository;
+using ShoppingAssignment_SE150854.View_Models;
 
 namespace ShoppingAssignment_SE150854.Pages.Products
 {
     public class DeleteModel : PageModel
     {
-        private readonly BusinessObject.Models.NorthwindCopyDBContext _context;
+        private readonly IProductRepository productRepository;
 
-        public DeleteModel(BusinessObject.Models.NorthwindCopyDBContext context)
+        public DeleteModel(IProductRepository _productRepository)
         {
-            _context = context;
+            productRepository = _productRepository;
         }
 
         [BindProperty]
         public Product Product { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public ProductViewModel productViewModel  { get; set; }
+
+        public IActionResult OnGet(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            Product = await _context.Products
-                .Include(p => p.Category)
-                .Include(p => p.Supplier).FirstOrDefaultAsync(m => m.ProductId == id);
+            Product = productRepository.GetProductById((int)id);
 
             if (Product == null)
             {
                 return NotFound();
+            }
+            else
+            {
+                productViewModel = new ProductViewModel
+                {
+                    ProductName = Product.ProductName,
+                    ProductId = Product.ProductId,
+                    UnitPrice = Product.UnitPrice,
+                    QuantityPerUnit = Product.QuantityPerUnit,
+                    CategoryId = Product.CategoryId,
+                    SupplierId = Product.SupplierId,
+                    Supplier = Product.Supplier,
+                    Category = Product.Category,
+                    ProductStatus = bool.Parse(Product.ProductStatus == 1 ? true.ToString() : false.ToString()),
+                    ProductImage = Product.ProductImage
+                };
             }
             return Page();
         }
@@ -46,14 +64,25 @@ namespace ShoppingAssignment_SE150854.Pages.Products
                 return NotFound();
             }
 
-            Product = await _context.Products.FindAsync(id);
+            Product product = productRepository.GetProductById((int)id);
 
-            if (Product != null)
+
+            if (product != null)
             {
-                _context.Products.Remove(Product);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    productRepository.DeleteProduct((int)id);
+                }
+                catch (Exception ex)
+                {
+                    TempData["Message"] = ex.Message;
+                    return Page();
+                }               
+            } 
+            else
+            {
+                return NotFound();
             }
-
             return RedirectToPage("./Index");
         }
     }

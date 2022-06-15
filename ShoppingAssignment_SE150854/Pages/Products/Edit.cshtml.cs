@@ -7,74 +7,124 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject.Models;
+using ShoppingAssignment_SE150854.View_Models;
+using DataAccess.Repository;
+using System.ComponentModel.DataAnnotations;
+using ShoppingAssignment_SE150854.Validation;
+using Microsoft.AspNetCore.Http;
+using ShoppingAssignment_SE150854.Utils.FileUploadService;
 
 namespace ShoppingAssignment_SE150854.Pages.Products
 {
     public class EditModel : PageModel
     {
-        private readonly BusinessObject.Models.NorthwindCopyDBContext _context;
+        private readonly IProductRepository productRepository;
+        private readonly ICategoryRepository categoryRepository;
+        private readonly ISupplierRepository supplierRepository;
+        private readonly IFileUploadService fileUploadService;
 
-        public EditModel(BusinessObject.Models.NorthwindCopyDBContext context)
+        public EditModel(IProductRepository _productRepository, 
+                        ICategoryRepository _categoryRepository, 
+                        ISupplierRepository _supplierRepository,
+                        IFileUploadService _fileUploadService)
         {
-            _context = context;
+            productRepository = _productRepository;
+            categoryRepository = _categoryRepository;
+            supplierRepository = _supplierRepository;
+            fileUploadService = _fileUploadService;
         }
 
         [BindProperty]
         public Product Product { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        [BindProperty]
+        public ProductViewModel ProductViewModel { get; set; }
+
+        [Display(Name = "Choose an image to upload (optional)")]
+        [DataType(DataType.Upload)]
+        [ProductImageValidation(ErrorMessage = "Wrong format for image")]
+        public IFormFile ImageFile { get; set; }
+
+        public IActionResult OnGet(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            Product = await _context.Products
-                .Include(p => p.Category)
-                .Include(p => p.Supplier).FirstOrDefaultAsync(m => m.ProductId == id);
+            Product product = productRepository.GetProductById((int)id);
 
-            if (Product == null)
+            if (product == null)
             {
                 return NotFound();
-            }
-           ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
-           ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "CompanyName");
+            } 
+            else
+            {
+                ProductViewModel = new ProductViewModel
+                {
+                    ProductId = product.ProductId,
+                    ProductName = product.ProductName,
+                    ProductStatus = bool.Parse(product.ProductStatus == 1 ? true.ToString() : false.ToString()),
+                    QuantityPerUnit = product.QuantityPerUnit,
+                    ProductImage = product.ProductImage,
+                    UnitPrice = product.UnitPrice,
+                    SupplierId = product.SupplierId,
+                    CategoryId = product.CategoryId,
+                };
+            } 
+
+            List<Category> categories = categoryRepository.GetCategories().ToList();
+            List<Supplier> suppliers = supplierRepository.GetSuppliers().ToList();
+
+            ViewData["CategoryId"] = new SelectList(categories, "CategoryId", "CategoryName");
+            ViewData["SupplierId"] = new SelectList(suppliers, "SupplierId", "CompanyName");
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
+                IEnumerable<Category> categories = categoryRepository.GetCategories();
+                IEnumerable<Supplier> suppliers = supplierRepository.GetSuppliers();
+                ViewData["CategoryId"] = new SelectList(categories, "CategoryId", "CategoryName");
+                ViewData["SupplierId"] = new SelectList(suppliers, "SupplierId", "CompanyName");
                 return Page();
             }
 
-            _context.Attach(Product).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                Product product = new Product
+                {
+                    ProductId = ProductViewModel.ProductId,
+                    ProductName = ProductViewModel.ProductName,
+                    CategoryId = ProductViewModel.CategoryId,
+                    SupplierId = ProductViewModel.SupplierId,
+                    QuantityPerUnit = ProductViewModel.QuantityPerUnit,
+                    UnitPrice = ProductViewModel.UnitPrice,
+                    ProductStatus = byte.Parse(ProductViewModel.ProductStatus ? 1.ToString() : 0.ToString()),
+                    ProductImage = ProductViewModel.ProductImage,
+                };
+
+                if (ImageFile != null)
+                {
+                    await fileUploadService.UploadFileAsync(ImageFile);
+                    product.ProductImage = ImageFile.FileName;
+                }
+                productRepository.UpdateProduct(product);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!ProductExists(Product.ProductId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                IEnumerable<Category> categories = categoryRepository.GetCategories();
+                IEnumerable<Supplier> suppliers = supplierRepository.GetSuppliers();
+                ViewData["CategoryId"] = new SelectList(categories, "CategoryId", "CategoryName");
+                ViewData["SupplierId"] = new SelectList(suppliers, "SupplierId", "CompanyName");
+                TempData["Message"] = ex.Message;
+                return Page();
             }
 
             return RedirectToPage("./Index");
         }
 
-        private bool ProductExists(int id)
-        {
-            return _context.Products.Any(e => e.ProductId == id);
-        }
     }
 }

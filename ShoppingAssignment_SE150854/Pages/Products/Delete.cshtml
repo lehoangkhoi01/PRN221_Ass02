@@ -13,51 +13,51 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Product.ProductName)
+            @Html.DisplayNameFor(model => model.productViewModel.ProductName)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Product.ProductName)
+            @Html.DisplayFor(model => model.productViewModel.ProductName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Product.QuantityPerUnit)
+            @Html.DisplayNameFor(model => model.productViewModel.QuantityPerUnit)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Product.QuantityPerUnit)
+            @Html.DisplayFor(model => model.productViewModel.QuantityPerUnit)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Product.UnitPrice)
+            @Html.DisplayNameFor(model => model.productViewModel.UnitPrice)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Product.UnitPrice)
+            @Html.DisplayFor(model => model.productViewModel.UnitPrice)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Product.ProductImage)
+            @Html.DisplayNameFor(model => model.productViewModel.ProductImage)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Product.ProductImage)
+            <image src="/images/@Model.Product.ProductImage" alt="@Model.Product.ProductImage" height="200" width="200"/>
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Product.ProductStatus)
+            @Html.DisplayNameFor(model => model.productViewModel.ProductStatus)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Product.ProductStatus)
+            @Html.DisplayFor(model => model.productViewModel.ProductStatus)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Product.Category)
+            @Html.DisplayNameFor(model => model.productViewModel.Category)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Product.Category.CategoryName)
+            @Html.DisplayFor(model => model.productViewModel.Category.CategoryName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Product.Supplier)
+            @Html.DisplayNameFor(model => model.productViewModel.Supplier)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Product.Supplier.CompanyName)
+            @Html.DisplayFor(model => model.productViewModel.Supplier.CompanyName)
         </dd>
     </dl>
     
     <form method="post">
-        <input type="hidden" asp-for="Product.ProductId" />
+        <input type="hidden" asp-for="productViewModel.ProductId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-page="./Index">Back to List</a>
     </form>

@@ -44,5 +44,79 @@ namespace DataAccess
             return customer;
         }
 
+        public IEnumerable<Customer> GetCusomerList()
+        {
+            IEnumerable<Customer> customerList;
+            try
+            {
+                var dbContext = new NorthwindCopyDBContext();
+                customerList = dbContext.Customers.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return customerList;
+        }
+
+        public Customer GetCustomerById(string id)
+        {
+            Customer customer;
+            try
+            {
+                var dbContext = new NorthwindCopyDBContext();
+                customer = dbContext.Customers.SingleOrDefault(c => c.CustomerId == id);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return customer;
+        }
+
+        public Customer GetCustomerByEmail(string email)
+        {
+            Customer customer;
+            try
+            {
+                var dbContext = new NorthwindCopyDBContext();
+                customer = dbContext.Customers.SingleOrDefault(c => c.Email.ToLower().Trim() == email.ToLower().Trim());
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return customer;
+        }
+
+
+        public void AddNewCustomer(Customer customer)
+        {
+            try
+            {
+                var dbContext = new NorthwindCopyDBContext();
+                dbContext.Customers.Add(customer);
+                dbContext.SaveChanges();
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public void UpdateCustomer(Customer customer)
+        {
+            try
+            {
+                var dbContext = new NorthwindCopyDBContext();
+                dbContext.Customers.Update(customer);
+                dbContext.SaveChanges();
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }
