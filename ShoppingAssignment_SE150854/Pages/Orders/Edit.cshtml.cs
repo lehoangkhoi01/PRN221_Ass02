@@ -3,10 +3,12 @@ using DataAccess.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using ShoppingAssignment_SE150854.View_Models;
 using System;
 
 namespace ShoppingAssignment_SE150854.Pages.Orders
 {
+    [BindProperties]
     public class EditModel : PageModel
     {
         private readonly IOrderRepository orderRepository;
@@ -43,6 +45,8 @@ namespace ShoppingAssignment_SE150854.Pages.Orders
                 {
                     return NotFound();
                 }
+
+
             }
             catch(Exception ex)
             {
@@ -51,6 +55,43 @@ namespace ShoppingAssignment_SE150854.Pages.Orders
             }
 
             return Page();
+        }
+    
+        public IActionResult OnPost()
+        {
+            if(!string.IsNullOrEmpty(ValidateDateTime()))
+            {
+                TempData["Message"] = ValidateDateTime();
+                return Page();
+            }
+
+            try
+            {
+                orderRepository.UpdateOrder(Order);
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = ex.Message;
+                return Page();
+            }
+
+            TempData["Message"] = "Update successfully.";
+            return Page();
+        }
+
+        private string ValidateDateTime()
+        {
+            if(Order.RequiredDate < Order.OrderDate)
+            {
+                return "Required date time must be greater than order date time";
+            }
+
+            if (Order.ShippedDate < Order.OrderDate)
+            {
+                return "Shipped date time must be greater than order date time";
+            }
+
+            return "";
         }
     }
 }

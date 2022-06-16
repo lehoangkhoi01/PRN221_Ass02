@@ -75,5 +75,20 @@ namespace DataAccess
                 throw new Exception(ex.Message);
             }
         }
+
+        public int GetTotalProductSold()
+        {
+            int result;
+            try
+            {
+                var dbContext = new NorthwindCopyDBContext();
+                result = dbContext.OrderDetails.Sum(o => o.Quantity);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return result;
+        }
     }
 }

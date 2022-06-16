@@ -11,6 +11,7 @@ namespace DataAccess.Repository
     {
         public IEnumerable<OrderDetail> GetOrderDetailsByOrderId(string orderId);
         public OrderDetail GetOrderDetailById(string orderId, int productId);
-        public void AddOrderDetail(IEnumerable<OrderDetail> orderDetails);    
+        public void AddOrderDetail(IEnumerable<OrderDetail> orderDetails);
+        public int GetTotalProductSold();
     }
 }

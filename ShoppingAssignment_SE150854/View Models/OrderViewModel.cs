@@ -1,6 +1,7 @@
 ﻿using BusinessObject.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ShoppingAssignment_SE150854.View_Models
 {
@@ -13,7 +14,6 @@ namespace ShoppingAssignment_SE150854.View_Models
         public DateTime? ShippedDate { get; set; }
         public decimal? Freight { get; set; }
         public string ShipAddress { get; set; }
-
         public virtual Customer Customer { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
