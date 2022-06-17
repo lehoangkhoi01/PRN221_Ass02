@@ -13,7 +13,6 @@ D:\Tài liệu học\PRN 221\Assignment\Assignment2\ShoppingAssignment_SE150854\
 D:\Tài liệu học\PRN 221\Assignment\Assignment2\ShoppingAssignment_SE150854\obj\Debug\net5.0\ShoppingAssignment_SE150854.RazorCoreGenerate.cache
 D:\Tài liệu học\PRN 221\Assignment\Assignment2\ShoppingAssignment_SE150854\obj\Debug\net5.0\Razor\Pages\Cart\Checkout.cshtml.g.cs
 D:\Tài liệu học\PRN 221\Assignment\Assignment2\ShoppingAssignment_SE150854\obj\Debug\net5.0\Razor\Pages\Cart\Index.cshtml.g.cs
-D:\Tài liệu học\PRN 221\Assignment\Assignment2\ShoppingAssignment_SE150854\obj\Debug\net5.0\Razor\Pages\Customers\Delete.cshtml.g.cs
 D:\Tài liệu học\PRN 221\Assignment\Assignment2\ShoppingAssignment_SE150854\obj\Debug\net5.0\Razor\Pages\Customers\Details.cshtml.g.cs
 D:\Tài liệu học\PRN 221\Assignment\Assignment2\ShoppingAssignment_SE150854\obj\Debug\net5.0\Razor\Pages\Customers\Edit.cshtml.g.cs
 D:\Tài liệu học\PRN 221\Assignment\Assignment2\ShoppingAssignment_SE150854\obj\Debug\net5.0\Razor\Pages\Customers\Index.cshtml.g.cs

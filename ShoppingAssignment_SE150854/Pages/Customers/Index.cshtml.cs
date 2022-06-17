@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BusinessObject.Models;
 using DataAccess.Repository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -19,8 +20,18 @@ namespace ShoppingAssignment_SE150854.Pages.Customers
 
         public IList<Customer> Customer { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            string role = HttpContext.Session.GetString("ROLE");
+            if(string.IsNullOrEmpty(role))
+            {
+                return RedirectToPage("/Login");
+            }
+            else if(role != "Admin")
+            {
+                return NotFound();
+            }
+
             try
             {
                 Customer = customerRepository.GetCustomerList().ToList();
@@ -28,7 +39,8 @@ namespace ShoppingAssignment_SE150854.Pages.Customers
             catch (Exception ex)
             {
                 TempData["Message"] = ex.Message;
-            }            
+            }
+            return Page();
         }
     }
 }

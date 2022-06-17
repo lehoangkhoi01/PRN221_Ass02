@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BusinessObject.Models;
+﻿using BusinessObject.Models;
 using DataAccess.Repository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +21,18 @@ namespace ShoppingAssignment_SE150854.Pages.Customers
 
         public IActionResult OnGet(string id)
         {
+            string role = HttpContext.Session.GetString("ROLE");
+            string email = HttpContext.Session.GetString("EMAIL");
+            if(string.IsNullOrEmpty(role))
+            {
+                return RedirectToPage("/Login");
+            }
+            else if(role != "Admin")
+            {
+                return NotFound();
+            }
+
+
             if (id == null)
             {
                 return NotFound();

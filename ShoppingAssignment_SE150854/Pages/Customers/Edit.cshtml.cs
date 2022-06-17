@@ -73,7 +73,7 @@ namespace ShoppingAssignment_SE150854.Pages.Customers
             {
                 return RedirectToPage("/Login");
             }
-            else if(role == "Admin")
+            else if(role != "Customer")
             {
                 return NotFound();
             }
@@ -83,7 +83,6 @@ namespace ShoppingAssignment_SE150854.Pages.Customers
             {
                 return NotFound();
             }
-
             
             CustomerId = customer.CustomerId;
             ContactName = customer.ContactName;
@@ -95,6 +94,16 @@ namespace ShoppingAssignment_SE150854.Pages.Customers
 
         public IActionResult OnPost()
         {
+            string role = HttpContext.Session.GetString("ROLE");
+            if(string.IsNullOrEmpty(role))
+            {
+                return RedirectToPage("/Login");
+            }
+            else if(role != "Customer")
+            {
+                return NotFound();
+            }
+
             if (!ModelState.IsValid)
             {
                 return Page();
