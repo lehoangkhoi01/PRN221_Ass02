@@ -44,8 +44,14 @@ namespace ShoppingAssignment_SE150854.Pages
         public string PhoneNumber { get; set; }
 
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            string role = HttpContext.Session.GetString("ROLE");
+            if(!string.IsNullOrEmpty(role))
+            {
+                return NotFound();
+            }
+            return Page();
         }
 
         public IActionResult OnPost()

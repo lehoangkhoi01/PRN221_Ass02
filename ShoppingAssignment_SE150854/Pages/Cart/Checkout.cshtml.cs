@@ -191,7 +191,7 @@ namespace ShoppingAssignment_SE150854.Pages.Cart
                 Product product = productRepository.GetProductById(cartItem.ProductId);
                 if (product.QuantityPerUnit < cartItem.Quantity)
                 {
-                    result = $"The product ${product.ProductName} does not have enough quantity in stock(${product.QuantityPerUnit})";
+                    result = $"The product {product.ProductName} does not have enough quantity in stock({product.QuantityPerUnit})";
                     break;
                 }
             }
