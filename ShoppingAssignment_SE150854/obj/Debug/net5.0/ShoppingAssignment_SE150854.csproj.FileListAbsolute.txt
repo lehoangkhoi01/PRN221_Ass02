@@ -22,7 +22,6 @@ D:\Tài liệu học\PRN 221\Assignment\Assignment2\ShoppingAssignment_SE150854\
 D:\Tài liệu học\PRN 221\Assignment\Assignment2\ShoppingAssignment_SE150854\obj\Debug\net5.0\Razor\Pages\Orders\Details.cshtml.g.cs
 D:\Tài liệu học\PRN 221\Assignment\Assignment2\ShoppingAssignment_SE150854\obj\Debug\net5.0\Razor\Pages\Orders\Edit.cshtml.g.cs
 D:\Tài liệu học\PRN 221\Assignment\Assignment2\ShoppingAssignment_SE150854\obj\Debug\net5.0\Razor\Pages\Orders\OrderHistory.cshtml.g.cs
-D:\Tài liệu học\PRN 221\Assignment\Assignment2\ShoppingAssignment_SE150854\obj\Debug\net5.0\Razor\Pages\Orders\Report.cshtml.g.cs
 D:\Tài liệu học\PRN 221\Assignment\Assignment2\ShoppingAssignment_SE150854\obj\Debug\net5.0\Razor\Pages\Privacy.cshtml.g.cs
 D:\Tài liệu học\PRN 221\Assignment\Assignment2\ShoppingAssignment_SE150854\obj\Debug\net5.0\Razor\Pages\Products\Create.cshtml.g.cs
 D:\Tài liệu học\PRN 221\Assignment\Assignment2\ShoppingAssignment_SE150854\obj\Debug\net5.0\Razor\Pages\Products\Delete.cshtml.g.cs

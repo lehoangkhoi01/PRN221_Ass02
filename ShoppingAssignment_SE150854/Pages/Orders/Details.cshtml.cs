@@ -41,13 +41,13 @@ namespace ShoppingAssignment_SE150854.Pages.Orders
                 {
                     return RedirectToPage("/Login");
                 }
-                //else
-                //{
-                //    if (AuthorizeForOrderDetailPage(email, role, id) == false)
-                //    {
-                //        return NotFound();
-                //    }
-                //}
+                else
+                {
+                    if (AuthorizeForOrderDetailPage(email, role, id) == false)
+                    {
+                        return NotFound();
+                    }
+                }
                 //-----------------------------------------
 
                 Order = orderRepository.GetOrderById(id);
