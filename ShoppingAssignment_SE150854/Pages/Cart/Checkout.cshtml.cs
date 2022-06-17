@@ -165,6 +165,8 @@ namespace ShoppingAssignment_SE150854.Pages.Cart
                 TempData["Message"] = ex.Message;
                 return Page();
             }
+
+            TempData["Message"] = "Order successfully";
             return RedirectToPage("/Orders/OrderHistory");
         }
 

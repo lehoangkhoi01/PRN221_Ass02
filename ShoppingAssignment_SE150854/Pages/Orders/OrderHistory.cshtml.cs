@@ -129,7 +129,7 @@ namespace ShoppingAssignment_SE150854.Pages.Orders
                 }
 
 
-                orderList = orderList.OrderByDescending(o => o.OrderDate).ToList();
+                orderList = orderList.OrderBy(o => o.OrderDate).ToList();
 
             }
             catch (Exception ex)

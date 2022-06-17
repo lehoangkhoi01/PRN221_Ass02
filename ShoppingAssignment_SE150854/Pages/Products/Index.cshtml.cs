@@ -72,8 +72,20 @@ namespace ShoppingAssignment_SE150854.Pages.Products
 
         public IActionResult OnPostAddToCart([FromForm] int productId)
         {
-            Product product = productRepository.GetProductById(productId);
+
+            //Authorization
+            string role = HttpContext.Session.GetString("ROLE");
+            if(string.IsNullOrEmpty(role))
+            {
+                return RedirectToPage("/Login");
+            }
+            else if(role != "Customer")
+            {
+                return NotFound();
+            }
+
             //Check validation for product
+            Product product = productRepository.GetProductById(productId);
             if(product == null)
             {
                 return NotFound();

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObject.Models;
 using DataAccess.Repository;
 using ShoppingAssignment_SE150854.View_Models;
+using Microsoft.AspNetCore.Http;
 
 namespace ShoppingAssignment_SE150854.Pages.Products
 {
@@ -27,6 +28,17 @@ namespace ShoppingAssignment_SE150854.Pages.Products
 
         public IActionResult OnGet(int? id)
         {
+            string role = HttpContext.Session.GetString("ROLE");
+            if (string.IsNullOrEmpty(role))
+            {
+                return RedirectToPage("/Login");
+            }
+            else if (role != "Admin")
+            {
+                return NotFound();
+            }
+
+
             if (id == null)
             {
                 return NotFound();

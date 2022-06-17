@@ -33,19 +33,10 @@ namespace ShoppingAssignment_SE150854.Pages.Products
             fileUploadService = _fileUploadService;
         }
 
-        public IActionResult OnGet()
-        {
-            IEnumerable<Category> categories = categoryRepository.GetCategories();
-            IEnumerable<Supplier> suppliers = supplierRepository.GetSuppliers();
-            ViewData["CategoryId"] = new SelectList(categories, "CategoryId", "CategoryName");
-            ViewData["SupplierId"] = new SelectList(suppliers, "SupplierId", "CompanyName");
-            return Page();
-        }
-
         [BindProperty]
         public Product Product { get; set; }
         [BindProperty]
-        public ProductViewModel ProductViewModel { get; set;}
+        public ProductViewModel ProductViewModel { get; set; }
 
         [BindProperty]
         [Required(ErrorMessage = "Product's image can not be empty")]
@@ -54,6 +45,27 @@ namespace ShoppingAssignment_SE150854.Pages.Products
         [ProductImageValidation]
         public IFormFile ImageFile { get; set; }
 
+
+        public IActionResult OnGet()
+        {
+            string role = HttpContext.Session.GetString("ROLE");
+            if (string.IsNullOrEmpty(role))
+            {
+                return RedirectToPage("/Login");
+            }
+            else if(role != "Admin")
+            {
+                return NotFound();
+            }
+
+            IEnumerable<Category> categories = categoryRepository.GetCategories();
+            IEnumerable<Supplier> suppliers = supplierRepository.GetSuppliers();
+            ViewData["CategoryId"] = new SelectList(categories, "CategoryId", "CategoryName");
+            ViewData["SupplierId"] = new SelectList(suppliers, "SupplierId", "CompanyName");
+            return Page();
+        }
+
+        
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)

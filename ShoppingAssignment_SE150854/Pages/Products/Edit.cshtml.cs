@@ -47,6 +47,16 @@ namespace ShoppingAssignment_SE150854.Pages.Products
 
         public IActionResult OnGet(int? id)
         {
+            string role = HttpContext.Session.GetString("ROLE");
+            if(string.IsNullOrEmpty(role))
+            {
+                return RedirectToPage("/Login");
+            }
+            else if(role != "Admin")
+            {
+                return NotFound();
+            }
+
             if (id == null)
             {
                 return NotFound();

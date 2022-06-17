@@ -1,21 +1,25 @@
 ﻿@page "{searchString?}"
 @model ShoppingAssignment_SE150854.Pages.Products.IndexModel
-
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
+@if (HttpContextAccessor.HttpContext.Session.GetString("ROLE") == "Admin")
+{
+    <p>
+        <a asp-page="Create">Create New</a>
+    </p>
+}
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<form >
+<form>
     <div class="form-group">
-    <label for="searchBox">Search product</label>
-    <input type="text" class="form-control col-6" id="searchBox" asp-for="SearchString" />
-    <button class="btn btn-primary mt-3" type="submit">Search</button>
-  </div>
+        <label for="searchBox">Search product</label>
+        <input type="text" class="form-control col-6" id="searchBox" asp-for="SearchString" />
+        <button class="btn btn-primary mt-3" type="submit">Search</button>
+    </div>
 </form>
 
 <table class="table">
@@ -64,27 +68,36 @@
                     <img src="~/images/@item.ProductImage" alt="product image" height="150" width="150" />
                 </td>
                 <td>
-                        @if(item.ProductStatus)
+                        @if (item.ProductStatus)
                         {
-                            <span>Active</span>
+                        <span>Active</span>
                         }
                         else
                         {
-                            <span>Inactive</span>
+                        <span>Inactive</span>
                         }
-                    </td>
+                </td>
                 <td>
                         @Html.DisplayFor(modelItem => item.Category.CategoryName)
                 </td>
                 <td>
                         @Html.DisplayFor(modelItem => item.Supplier.CompanyName)
                 </td>
-                <td>
-                    <a asp-page="./Edit" asp-route-id="@item.ProductId">Edit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.ProductId">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.ProductId">Delete</a>|
-                    <button class="btn btn-primary" type="submit">Add to cart</button>
-                </td>
+                    @if (HttpContextAccessor.HttpContext.Session.GetString("ROLE") == "Admin")
+                    {
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.ProductId">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.ProductId">Details</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.ProductId">Delete</a>|
+                    </td>
+                    }
+                    else
+                    {
+                    <td>
+                        <a asp-page="./Details" asp-route-id="@item.ProductId">Details</a> |
+                        <button class="btn btn-primary" type="submit">Add to cart</button>
+                    </td>
+                    }
             </tr>
             </form>
         }
@@ -95,12 +108,12 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-}
+    }
 
-<script type="text/javascript">
-    window.onload = function() {
-        if ('@TempData["Message"]' != "") {
-            alert('@TempData["Message"]');
-        }
-    };
-</script>
+    <script type="text/javascript">
+        window.onload = function() {
+            if ('@TempData["Message"]' != "") {
+                alert('@TempData["Message"]');
+            }
+        };
+    </script>
